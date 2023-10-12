@@ -3279,6 +3279,15 @@ struct Diag_Class_Async_On_Getter_Or_Setter {
   Source_Code_Span async_keyword;
   Source_Code_Span getter_setter_keyword;
 };
+
+struct Diag_Confusing_Order_Bitshift_And_Bitwise_And{
+  [[qljs::diag("E0715", Diagnostic_Severity::warning)]]  //
+  [[qljs::message(
+      "confusing order of operations when using"            //
+      "bitwise AND and bitshift, try using (a & b) {2} c",  //
+      ARG(logic_expression))]] 
+  Source_Code_Span logic_expression;
+};
 }
 QLJS_WARNING_POP
 

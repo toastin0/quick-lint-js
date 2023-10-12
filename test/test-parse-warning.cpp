@@ -436,6 +436,22 @@ TEST_F(Test_Parse_Warning, warn_on_xor_operation_used_as_exponentiation) {
   test_parse_and_visit_expression(u8"4 ^ 3"_sv, no_diags);
   test_parse_and_visit_expression(u8"(x+2)^a"_sv, no_diags);
 }
+TEST_F(Test_Parse_Warning, warn_on_confusing_order_of_bitshift_and_bitwiseand) {
+  test_parse_and_visit_expression(
+      u8"a & b >> c",
+      u8"^^^^^^^^^^ Diag_Confusing_Order_Bitshift_And_Bitwise_And"_diag);
+  test_parse_and_visit_expression(
+      u8"a&b>>c",
+      u8"^^^^^^ Diag_Confusing_Order_Bitshift_And_Bitwise_And"_diag);
+  test_parse_and_visit_expression(
+      u8"xy & ab << c",
+      u8"^^^^^^^^^^^^ Diag_Confusing_Order_Bitshift_And_Bitwise_And"_diag);
+  test_parse_and_visit_expression(
+    u8"0x000 & 0x00000 << 0xfffff",
+    u8"^^^^^^^^^^^^^^^^^^^^^^^^^^ Diag_Confusing_Order_Bitshift_And_Bitwise_And"_diag);
+  test_parse_and_visit_expression(u8"(a & b) >> c", no_diags);
+  test_parse_and_visit_expression(u8"a & (b >> c)", no_diags);
+}
 }
 }
 
